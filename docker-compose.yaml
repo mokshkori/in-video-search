@@ -1,0 +1,35 @@
+services:
+  # video-service:
+  #   build:
+  #     context: ./video-service  # Ensure correct path to your Dockerfile
+  #     dockerfile: Dockerfile
+  #   container_name: video-service
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     SPRING_APPLICATION_JSON: >
+  #       { 
+  #         "server.port": "8080",
+  #         "minio.url": "http://minio:9000",
+  #         "minio.access.key": "minioadmin",
+  #         "minio.secret.key": "minioadmin",
+  #         "minio.bucket.name": "videos"
+  #       }
+  #   depends_on:
+  #     - minio
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+volumes:
+  minio_data:
